@@ -1,0 +1,1345 @@
+/* 🌻 Pinterest Scrapbook & Van Gogh Sunflower Editorial for iPhone 16 Pro & Desktop */
+/* Pure Aesthetic: Cutout PNGs, 35mm Filmstrips, Newspaper Love Wallpaper, No Cringe Text, No Polaroid Boxes */
+
+:root {
+    --sunflower-gold: #FFB300;
+    --sunflower-amber: #F59E0B;
+    --sunflower-deep: #D97706;
+    --sunflower-dark: #22150E;
+    --paper-tint: #F7F3EB;
+    --tape-amber: rgba(254, 240, 138, 0.82);
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-hand: 'Caveat', cursive;
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    background-color: #F5F0E6;
+}
+
+body {
+    font-family: var(--font-sans);
+    color: var(--sunflower-dark);
+    /* Vintage newspaper love typography background */
+    background: 
+        radial-gradient(circle at 50% 0%, rgba(255, 248, 225, 0.9) 0%, rgba(245, 239, 226, 0.95) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(220, 205, 185, 0.15) 24px, rgba(220, 205, 185, 0.15) 25px),
+        #F5EFE3;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    position: relative;
+    line-height: 1.5;
+}
+
+/* Floating Painterly Sunflowers Canvas */
+#sunflower-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* =========================================
+   INTERACTIVE SUNFLOWER GATE / LOCK SCREEN
+   ========================================= */
+.gate-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #18120F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    overflow: hidden;
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gate-screen.unlocked {
+    opacity: 0;
+    transform: scale(1.08);
+    pointer-events: none;
+}
+
+.gate-backdrop-art {
+    position: absolute;
+    inset: 0;
+    background: url('../assets/pinterest/starry_sunflowers_bg.webp') center center / cover no-repeat;
+    opacity: 0.42;
+    filter: saturate(1.2) blur(1px);
+    transform: scale(1.05);
+}
+
+.gate-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(24, 18, 15, 0.6) 20%, rgba(18, 12, 10, 0.95) 90%);
+}
+
+.gate-content {
+    position: relative;
+    z-index: 10;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.gate-badge {
+    display: inline-block;
+    background: rgba(254, 240, 138, 0.18);
+    border: 1px dashed rgba(245, 158, 11, 0.6);
+    color: #FEF08A;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    padding: 5px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+}
+
+.gate-title {
+    font-family: var(--font-serif);
+    font-size: 2.1rem;
+    color: #FFFDF9;
+    line-height: 1.2;
+    margin: 0;
+    text-shadow: 0 4px 18px rgba(0,0,0,0.6);
+}
+
+.gate-title .gate-name {
+    font-family: var(--font-hand);
+    font-size: 2.8rem;
+    color: #FFD54F;
+    display: block;
+    margin-top: 4px;
+    text-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+}
+
+.gate-sub {
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 320px;
+}
+
+.gate-sunflower-wrapper {
+    margin: 18px 0 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.gate-sunflower-btn {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #FFF9EE 30%, #FFE082 70%, #FFB300 100%);
+    border: 3px solid #FFF8E1;
+    box-shadow: 0 0 35px rgba(245, 158, 11, 0.6), 0 10px 24px rgba(0,0,0,0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.gate-sunflower-btn:active {
+    transform: scale(0.92);
+}
+
+.gate-sunflower-pulse {
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    border: 2px dashed rgba(254, 240, 138, 0.7);
+    animation: gate-spin 18s linear infinite;
+    pointer-events: none;
+}
+
+.gate-sunflower-glow {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(254, 240, 138, 0.5), transparent 70%);
+    animation: gate-glow-pulse 2s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes gate-glow-pulse {
+    from { transform: scale(0.95); opacity: 0.6; }
+    to { transform: scale(1.15); opacity: 1; }
+}
+
+@keyframes gate-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.gate-sunflower-img {
+    width: 78px;
+    height: 78px;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+    animation: sunflower-wobble 4s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes sunflower-wobble {
+    0% { transform: rotate(-5deg) scale(1); }
+    100% { transform: rotate(5deg) scale(1.05); }
+}
+
+.gate-tap-prompt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #FEF08A;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    animation: gentle-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes gentle-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.gate-loader-pill {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.gate-timer-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.gate-timer-badge {
+    color: #FEF08A;
+    background: rgba(245, 158, 11, 0.22);
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    padding: 3px 12px;
+    border-radius: 14px;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+    backdrop-filter: blur(8px);
+}
+
+.gate-pct-text {
+    color: #FFD54F;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+}
+
+.gate-progress-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.gate-progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #F59E0B, #FBBF24, #FEF08A);
+    border-radius: 6px;
+    transition: width 0.25s ease-out;
+}
+
+.gate-status-text {
+    font-size: 0.76rem;
+    color: rgba(254, 240, 138, 0.88);
+    letter-spacing: 0.03em;
+    text-align: center;
+}
+
+/* Radiant Golden State when Everything is 100% Downloaded */
+.gate-sunflower-btn.is-ready {
+    box-shadow: 0 0 50px rgba(245, 158, 11, 0.95), 0 0 24px rgba(254, 240, 138, 0.9), 0 10px 30px rgba(0,0,0,0.5);
+    animation: ready-pulse 1.3s ease-in-out infinite alternate;
+}
+
+@keyframes ready-pulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.8)); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 26px rgba(254, 240, 138, 1)); }
+}
+
+/* Wiggle animation if tapped before ready */
+.gate-sunflower-btn.wiggle {
+    animation: gate-wiggle 0.4s ease;
+}
+
+@keyframes gate-wiggle {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px) rotate(-6deg); }
+    40%, 80% { transform: translateX(8px) rotate(6deg); }
+}
+
+/* App Container (Strictly iPhone 16 Pro Viewport, Centered on Laptop) */
+.app-container {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding: 0 16px;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(40px, env(safe-area-inset-bottom));
+}
+
+@media (min-width: 900px) {
+    .app-container {
+        max-width: 880px;
+        padding: 0 32px;
+    }
+}
+
+/* =========================================
+   1. TOP ISLAND & MUSIC PLAYER
+   ========================================= */
+.top-island-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 40px;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    box-shadow: 0 4px 18px rgba(44, 29, 19, 0.08);
+    margin-bottom: 24px;
+    position: sticky;
+    top: max(12px, env(safe-area-inset-top));
+    z-index: 100;
+}
+
+.island-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--sunflower-dark);
+}
+
+.island-sunflower-pin {
+    width: 22px;
+    height: 22px;
+    animation: gentle-spin 16s linear infinite;
+}
+
+@keyframes gentle-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.island-audio-pill {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: #FFF9EE;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 30px;
+    padding: 4px 14px 4px 8px;
+    user-select: none;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.12);
+    cursor: default;
+}
+
+.mini-vinyl {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #FFB300 20%, #1A1412 22%, #2C221E 70%, #1A1412 100%);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.mini-vinyl.spinning {
+    animation: vinyl-spin 3s linear infinite;
+}
+
+@keyframes vinyl-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.audio-equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 12px;
+}
+
+.equalizer-bar {
+    width: 2px;
+    height: 3px;
+    background: var(--sunflower-deep);
+    border-radius: 2px;
+}
+
+.audio-equalizer.playing .equalizer-bar:nth-child(1) { animation: eq-bounce 0.8s infinite ease-in-out; }
+.audio-equalizer.playing .equalizer-bar:nth-child(2) { animation: eq-bounce 0.6s infinite ease-in-out 0.2s; }
+.audio-equalizer.playing .equalizer-bar:nth-child(3) { animation: eq-bounce 0.9s infinite ease-in-out 0.4s; }
+
+@keyframes eq-bounce {
+    0%, 100% { height: 3px; }
+    50% { height: 12px; }
+}
+
+.audio-text {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--sunflower-deep);
+}
+
+/* =========================================
+   2. PINTEREST PHOTOSHOOT SCRAPBOOK POSTER
+   ========================================= */
+.scrapbook-hero-poster {
+    background: #FFFDF9;
+    /* Newspaper "love" collage watermark */
+    background-image: 
+        radial-gradient(#E8DFC8 1px, transparent 1px),
+        linear-gradient(135deg, rgba(255, 252, 245, 0.9) 0%, rgba(248, 240, 226, 0.95) 100%);
+    background-size: 20px 20px, 100% 100%;
+    border-radius: 32px;
+    padding: 28px 18px 36px;
+    box-shadow: 0 20px 50px -10px rgba(50, 35, 20, 0.2), 0 0 0 1px rgba(220, 190, 150, 0.35);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 38px;
+}
+
+/* Newspaper watermark banner in background */
+.newspaper-love-watermark {
+    position: absolute;
+    top: 8px;
+    left: -20px;
+    right: -20px;
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.22em;
+    color: rgba(180, 150, 120, 0.18);
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Red String of Fate Graphic */
+.red-thread-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 6;
+}
+
+/* Header Box */
+.poster-header-box {
+    text-align: center;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 10;
+}
+
+.washi-tape-badge {
+    display: inline-block;
+    background: var(--tape-amber);
+    border: 1px dashed rgba(217, 119, 6, 0.45);
+    padding: 5px 18px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: var(--sunflower-dark);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transform: rotate(-1.5deg);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    margin-bottom: 12px;
+}
+
+.poster-title {
+    font-family: var(--font-serif);
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--sunflower-dark);
+    margin-bottom: 8px;
+}
+
+.poster-title .handwritten-name {
+    font-family: var(--font-hand);
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--sunflower-deep);
+    display: inline-block;
+    transform: rotate(-3deg);
+}
+
+.poster-subquote {
+    font-family: var(--font-hand);
+    font-size: 1.5rem;
+    line-height: 1.35;
+    color: #654E3F;
+}
+
+/* Master Birthday Story Scrapbook Centerpiece */
+.hero-story-container,
+.cutout-stage-container {
+    position: relative;
+    margin: 16px auto 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 8;
+    max-width: 420px;
+    width: 100%;
+}
+
+.hero-story-img,
+.cutout-hero-img {
+    width: 100%;
+    max-width: 385px;
+    height: auto;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: 0 20px 48px -10px rgba(44, 29, 19, 0.28), 0 0 0 1px rgba(220, 190, 150, 0.4);
+    display: block;
+    cursor: pointer;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+
+@media (min-width: 768px) {
+    .hero-story-img,
+    .cutout-hero-img {
+        max-width: 430px;
+    }
+}
+
+.hero-story-img:hover,
+.cutout-hero-img:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 26px 54px -10px rgba(44, 29, 19, 0.35), 0 0 0 1px rgba(220, 190, 150, 0.5);
+}
+
+.hero-story-img:active,
+.cutout-hero-img:active {
+    transform: scale(0.98);
+}
+
+/* Washi Tape Accent on Cutout */
+.tape-top-left {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    width: 80px;
+    height: 20px;
+    background: rgba(254, 240, 138, 0.85);
+    border: 1px dashed rgba(217, 119, 6, 0.4);
+    transform: rotate(-18deg);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 9;
+}
+
+.sunflower-hero-stamp {
+    position: absolute;
+    bottom: -15px;
+    right: 15px;
+    width: 65px;
+    height: 65px;
+    filter: drop-shadow(0 6px 14px rgba(44, 29, 19, 0.3));
+    z-index: 12;
+    animation: gentle-spin 26s linear infinite;
+}
+
+/* Scrapbook Editorial Stickers Row */
+.scrapbook-stickers-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 10;
+}
+
+.craft-paper-sticker {
+    background: #FFFDF9;
+    padding: 7px 16px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid rgba(220, 190, 150, 0.4);
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--sunflower-deep);
+    white-space: nowrap;
+}
+
+.craft-paper-sticker.rot-left { transform: rotate(-4deg); }
+.craft-paper-sticker.rot-right { transform: rotate(3deg); }
+
+/* =========================================
+   3. KODAK 35MM CONTINUOUS FILMSTRIP (NO TEXT BELOW)
+   ========================================= */
+.filmstrip-section {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.filmstrip-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.filmstrip-brand-label {
+    font-size: 0.74rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--sunflower-deep);
+}
+
+.filmstrip-swipe-pill {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #8D7667;
+}
+
+/* 35mm Film Roll Housing */
+.filmstrip-reel-housing {
+    background: #110E0C;
+    border-radius: 16px;
+    padding: 20px 12px;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.4);
+    position: relative;
+}
+
+.filmstrip-reel-housing::-webkit-scrollbar {
+    display: none;
+}
+
+/* Sprocket Holes */
+.filmstrip-reel-housing::before,
+.filmstrip-reel-housing::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 9px;
+    background-image: radial-gradient(#FFFFFF 40%, transparent 42%);
+    background-size: 15px 9px;
+    opacity: 0.85;
+    pointer-events: none;
+}
+
+.filmstrip-reel-housing::before { top: 5px; }
+.filmstrip-reel-housing::after { bottom: 5px; }
+
+/* 35mm Clean Frame (No Text Below!) */
+.clean-film-frame {
+    scroll-snap-align: center;
+    flex: 0 0 220px;
+    background: #1A1614;
+    border-radius: 6px;
+    padding: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.25s var(--ease-spring);
+}
+
+.clean-film-frame:active {
+    transform: scale(0.97);
+}
+
+.clean-film-frame:hover img {
+    transform: scale(1.05);
+}
+
+.film-mark-text {
+    display: flex;
+    justify-content: space-between;
+    font-family: monospace;
+    font-size: 0.65rem;
+    color: #FBBF24;
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+    padding: 0 2px;
+}
+
+.film-img-wrapper {
+    width: 100%;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.film-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* =========================================
+   4. VAN GOGH STARRY NIGHT SUNFLOWERS (NIGHT SPREAD)
+   ========================================= */
+.starry-sunflower-spread {
+    background: linear-gradient(180deg, #091024 0%, #101B3A 50%, #080D1D 100%);
+    border-radius: 32px;
+    padding: 34px 18px 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 20px 50px rgba(8, 13, 29, 0.45);
+    position: relative;
+    overflow: hidden;
+    color: #FFFFFF;
+}
+
+.starry-art-underlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.36;
+    mix-blend-mode: screen;
+    pointer-events: none;
+}
+
+.starry-spread-content {
+    position: relative;
+    z-index: 5;
+}
+
+.starry-title {
+    font-family: var(--font-serif);
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #FFD54F;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.starry-quote {
+    font-family: var(--font-hand);
+    font-size: 1.45rem;
+    color: #FEF08A;
+    margin-bottom: 22px;
+    line-height: 1.35;
+}
+
+/* Clean Floating Starry Cards (No Text Below!) */
+.starry-cards-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 4px 16px;
+}
+
+.starry-cards-track::-webkit-scrollbar {
+    display: none;
+}
+
+.clean-starry-card {
+    scroll-snap-align: center;
+    flex: 0 0 255px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 14px 32px rgba(0,0,0,0.45);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s var(--ease-spring);
+}
+
+.clean-starry-card:hover {
+    transform: translateY(-6px) scale(1.02);
+}
+
+.clean-starry-card img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    display: block;
+}
+
+.card-painterly-pin {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 38px;
+    height: 38px;
+    z-index: 10;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+}
+
+/* =========================================
+   5. CANDID RETRO VIDEO VIEWERS (NO TEXT BELOW)
+   ========================================= */
+.videos-reel-section {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.videos-horizontal-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 4px 18px;
+    transform: translateZ(0);
+    will-change: scroll-position;
+    contain: layout paint;
+}
+
+.videos-horizontal-track::-webkit-scrollbar {
+    display: none;
+}
+
+.clean-video-card {
+    scroll-snap-align: center;
+    flex: 0 0 300px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 16px 36px rgba(44, 29, 19, 0.22);
+    transition: transform 0.3s var(--ease-spring);
+    background: #000;
+    transform: translateZ(0);
+    contain: content;
+    will-change: transform;
+}
+
+@media (min-width: 768px) {
+    .clean-video-card {
+        flex: 0 0 345px;
+    }
+}
+
+.clean-video-card:hover {
+    transform: translateY(-6px) scale(1.02);
+}
+
+.clean-video-card video,
+.clean-video-card img {
+    width: 100%;
+    aspect-ratio: 9/16;
+    object-fit: cover;
+    display: block;
+    border-radius: 18px;
+    transform: translateZ(0);
+}
+
+/* =========================================
+   6. PINTEREST PHOTO MOOD BOARD (ALL REMAINING PHOTOS)
+   ========================================= */
+.moodboard-section {
+    margin-bottom: 44px;
+}
+
+.moodboard-header {
+    margin-bottom: 16px;
+    padding: 0 4px;
+}
+
+.moodboard-title {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--sunflower-dark);
+}
+
+.moodboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (min-width: 900px) {
+    .moodboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+}
+
+.clean-mosaic-card {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 8px 24px -2px rgba(44, 29, 19, 0.14);
+    transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
+}
+
+.clean-mosaic-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 16px 36px rgba(44, 29, 19, 0.22);
+    z-index: 5;
+}
+
+.clean-mosaic-card img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.clean-mosaic-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Corner Tape on Alternate Mosaic Cards */
+.mosaic-tape {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 60px;
+    height: 16px;
+    background: rgba(254, 240, 138, 0.85);
+    border: 1px dashed rgba(217, 119, 6, 0.4);
+    z-index: 5;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   7. THE UNSPOKEN LOVE LETTER
+   ========================================= */
+.letter-section {
+    margin-bottom: 40px;
+}
+
+.letter-teaser-card {
+    background: linear-gradient(135deg, #FFFDF8, #FFF5DE);
+    border: 1.5px dashed rgba(245, 158, 11, 0.5);
+    border-radius: 24px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(44, 29, 19, 0.08);
+}
+
+.letter-sunflower-pin {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 12px;
+}
+
+.letter-teaser-title {
+    font-family: var(--font-serif);
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--sunflower-dark);
+    margin-bottom: 6px;
+}
+
+.letter-teaser-sub {
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    color: #6B5546;
+    margin-bottom: 20px;
+}
+
+.btn-open-letter {
+    background: linear-gradient(135deg, #FFB300, #F59E0B);
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
+}
+
+.btn-open-letter:active {
+    transform: scale(0.96);
+}
+
+/* Fullscreen Letter Modal */
+.letter-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 14, 10, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.letter-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.letter-modal-inner {
+    background: #FFFDF8;
+    background-image: radial-gradient(#F5E4C4 0.75px, transparent 0.75px);
+    background-size: 16px 16px;
+    border-radius: 28px;
+    max-width: 440px;
+    width: 100%;
+    max-height: 88vh;
+    max-height: 88dvh;
+    overflow-y: auto;
+    padding: 30px 24px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    position: relative;
+    border: 1px solid rgba(255, 213, 79, 0.5);
+}
+
+.letter-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #F3ECE2;
+    font-size: 1.1rem;
+    color: #6B5546;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.letter-salutation {
+    font-family: var(--font-hand);
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--sunflower-deep);
+    margin-bottom: 14px;
+}
+
+.letter-paragraph {
+    font-family: var(--font-hand);
+    font-size: 1.45rem;
+    line-height: 1.5;
+    color: var(--sunflower-dark);
+    margin-bottom: 16px;
+}
+
+.letter-signature {
+    font-family: var(--font-hand);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--sunflower-amber);
+    text-align: right;
+    margin-top: 24px;
+}
+
+/* =========================================
+   8. MAKE A BIRTHDAY WISH CAKE
+   ========================================= */
+.cake-section {
+    background: linear-gradient(135deg, #FFF9EE, #FFF2D6);
+    border-radius: 28px;
+    padding: 34px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(44, 29, 19, 0.08);
+    border: 1px solid rgba(255, 213, 79, 0.45);
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.cake-header-title {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--sunflower-dark);
+    margin-bottom: 6px;
+}
+
+.cake-header-sub {
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    color: #6B5546;
+    margin-bottom: 24px;
+}
+
+.cake-stage {
+    position: relative;
+    width: 140px;
+    height: 150px;
+    margin: 0 auto 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.candle-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: -2px;
+}
+
+.candle-flame {
+    width: 24px;
+    height: 36px;
+    background: radial-gradient(circle at 50% 80%, #FFFFFF 0%, #FFEB3B 30%, #FF9800 65%, #F44336 90%);
+    border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
+    box-shadow: 0 0 20px #FF9800, 0 0 35px #FFEB3B;
+    animation: flame-flicker 1.4s infinite alternate ease-in-out;
+    transform-origin: center bottom;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.candle-flame.blown-out {
+    opacity: 0;
+    transform: scale(0.2);
+    pointer-events: none;
+}
+
+@keyframes flame-flicker {
+    0% { transform: scale(1) rotate(-2deg); }
+    100% { transform: scale(1.08, 0.94) rotate(2deg); }
+}
+
+.candle-smoke {
+    position: absolute;
+    top: -20px;
+    width: 14px;
+    height: 30px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.candle-smoke.active {
+    animation: smoke-rise 1.5s forwards ease-out;
+}
+
+@keyframes smoke-rise {
+    0% { opacity: 0.8; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-35px) scale(2.2); }
+}
+
+.candle-stick {
+    width: 12px;
+    height: 38px;
+    background: repeating-linear-gradient(45deg, #FFB300, #FFB300 6px, #FFFDF9 6px, #FFFDF9 12px);
+    border-radius: 4px;
+}
+
+.cake-body-svg {
+    width: 130px;
+    height: 80px;
+    filter: drop-shadow(0 8px 16px rgba(44, 29, 19, 0.12));
+}
+
+.wish-prompt-text {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--sunflower-deep);
+}
+
+.wish-celebration {
+    animation: pop-in 0.5s var(--ease-spring);
+}
+
+.wish-celebration-title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--sunflower-amber);
+    margin-bottom: 6px;
+}
+
+.wish-celebration-p {
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    color: #6B5546;
+}
+
+/* =========================================
+   9. CINEMATIC FULLSCREEN LIGHTBOX
+   ========================================= */
+.lightbox-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(14, 10, 7, 0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+}
+
+.lightbox-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: max(16px, env(safe-area-inset-top)) 18px 10px;
+    color: #FFFFFF;
+    z-index: 10;
+}
+
+.lightbox-counter {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.lightbox-close-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+    border: none;
+    color: #FFFFFF;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.lightbox-media-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.lightbox-img, .lightbox-video {
+    max-width: 100%;
+    max-height: 80vh;
+    max-height: 80dvh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.lightbox-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(10px);
+    border: none;
+    color: #FFFFFF;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.lightbox-nav-btn.prev { left: 12px; }
+.lightbox-nav-btn.next { right: 12px; }
+
+/* =========================================
+   10. FOOTER
+   ========================================= */
+.site-footer {
+    text-align: center;
+    padding: 30px 16px 44px;
+    color: #8D7667;
+}
+
+.footer-quote {
+    font-family: var(--font-hand);
+    font-size: 1.55rem;
+    color: var(--sunflower-deep);
+    margin-bottom: 6px;
+}
+
+.footer-small {
+    font-size: 0.76rem;
+    letter-spacing: 0.05em;
+}
+
+/* Animations */
+@keyframes pop-in {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.hidden {
+    display: none !important;
+}

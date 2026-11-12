@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>Happy Birthday Cutie 🌻</title>
+    
+    <!-- iPhone 16 Pro & High Density Display Settings -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#F5F0E6">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌻</text></svg>">
+    
+    <!-- Google Fonts: Editorial Serif, Clean Sans, and Authentic Handwritten Script -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Floating Painterly Sunflower Petals Canvas -->
+    <canvas id="sunflower-canvas"></canvas>
+
+    <!-- =========================================
+         INTERACTIVE SUNFLOWER GATE / LOCK SCREEN
+         ========================================= -->
+    <div id="gate-screen" class="gate-screen">
+        <div class="gate-backdrop-art"></div>
+        <div class="gate-vignette"></div>
+
+        <div class="gate-content">
+            <div class="gate-badge">NOVEMBER 13 • 20TH BIRTHDAY</div>
+
+            <h1 class="gate-title">
+                A Little World For You<br>
+                <span class="gate-name">Happy Birthday, Mju 🌻</span>
+            </h1>
+
+            <p class="gate-sub">Every laugh, every stolen glance, and all our sweetest memories... unlocked just for you.</p>
+
+            <!-- Interactive Glowing Sunflower Button -->
+            <div class="gate-sunflower-wrapper">
+                <button id="gate-enter-btn" class="gate-sunflower-btn" aria-label="Tap to unlock">
+                    <div class="gate-sunflower-pulse"></div>
+                    <div class="gate-sunflower-glow"></div>
+                    <img class="gate-sunflower-img" src="assets/pinterest/sunflower_painterly_pin.webp" alt="Unlock Sunflower">
+                </button>
+                <div class="gate-tap-prompt">
+                    <span class="tap-hand">👆</span>
+                    <span id="gate-prompt-text">Tap the sunflower to enter 🌻</span>
+                </div>
+            </div>
+
+            <!-- Preloader Progress & Live Countdown Timer -->
+            <div id="gate-loader" class="gate-loader-pill">
+                <div class="gate-timer-row">
+                    <span id="gate-timer-badge" class="gate-timer-badge">⏱️ <span id="gate-timer-sec">Preparing...</span></span>
+                    <span id="gate-loader-pct" class="gate-pct-text">0%</span>
+                </div>
+                <div class="gate-progress-track">
+                    <div id="gate-progress-bar" class="gate-progress-fill"></div>
+                </div>
+                <span id="gate-loader-status" class="gate-status-text">Downloading Phillip Phillips song & memories...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+
+        <!-- Top Status Island & Non-stop Romantic Soundtrack -->
+        <header class="top-island-bar">
+            <div class="island-status">
+                <img class="island-sunflower-pin" src="assets/pinterest/sunflower_painterly_pin.webp" alt="sunflower">
+                <span>Birthday Queen • Nov 13</span>
+            </div>
+            <div id="audio-pill" class="island-audio-pill non-stop-pill" title="Phillip Phillips - Gone, Gone, Gone">
+                <div id="audio-disc" class="mini-vinyl spinning"></div>
+                <div id="audio-bars" class="audio-equalizer playing">
+                    <span class="equalizer-bar"></span>
+                    <span class="equalizer-bar"></span>
+                    <span class="equalizer-bar"></span>
+                </div>
+                <span id="audio-label" class="audio-text">Gone, Gone, Gone 🎵</span>
+            </div>
+        </header>
+
+        <!-- =========================================
+             SECTION 1: THE PINTEREST SCRAPBOOK HERO POSTER
+             ========================================= -->
+        <section class="scrapbook-hero-poster">
+            <div class="newspaper-love-watermark">love love love love love love love love love love love love</div>
+
+            <!-- Red String of Fate SVG -->
+            <svg class="red-thread-svg" viewBox="0 0 400 480" fill="none" preserveAspectRatio="none">
+                <path d="M 40,60 Q 180,120 360,200 T 160,460" stroke="#E11D48" stroke-width="1.8" stroke-dasharray="4 3" opacity="0.4"/>
+            </svg>
+
+            <!-- Poster Header -->
+            <div class="poster-header-box">
+                <div class="washi-tape-badge">NOVEMBER 13 • BIRTHDAY AMMU 🌻</div>
+                <h1 class="poster-title">
+                    Happy 20th Birthday<br>
+                    <span class="handwritten-name">Mju 🌻</span>
+                </h1>
+                <p class="poster-subquote">"Two years ago it was a random wish from a random boy... now we end up here, being part of each other's lives."</p>
+            </div>
+
+            <!-- Master Birthday Story Scrapbook Centerpiece -->
+            <div class="hero-story-container">
+                <div class="tape-top-left"></div>
+                <img id="hero-cutout-click" class="hero-story-img" src="assets/pinterest/hero_birthday_story.webp?v=20th" alt="Happy Birthday Mju Scrapbook Story" loading="eager" decoding="async">
+                <img class="sunflower-hero-stamp" src="assets/pinterest/sunflower_painterly_pin.webp" alt="Sunflower">
+            </div>
+
+            <!-- Stickers Row -->
+            <div class="scrapbook-stickers-row">
+                <div class="craft-paper-sticker rot-left"> 💛</div>
+                <div class="craft-paper-sticker rot-right">✨</div>
+            </div>
+        </section>
+
+        <!-- =========================================
+             SECTION 2: KODAK 35MM CONTINUOUS FILMSTRIP (NO TEXT BELOW)
+             ========================================= -->
+        <section class="filmstrip-section">
+            <div class="filmstrip-header-row">
+                <span class="filmstrip-brand-label">35mm Filmstrip • Motion Stills</span>
+                <span class="filmstrip-swipe-pill">Swipe →</span>
+            </div>
+
+            <!-- 35mm Film Reel Housing -->
+            <div id="filmstrip-track" class="filmstrip-reel-housing">
+                <!-- Dynamically injected via JS -->
+            </div>
+        </section>
+
+        <!-- =========================================
+             SECTION 3: VAN GOGH STARRY NIGHT SUNFLOWERS (NO TEXT BELOW)
+             ========================================= -->
+        <section class="starry-sunflower-spread">
+            <img class="starry-art-underlay" src="assets/pinterest/starry_sunflowers_bg.webp" alt="Starry Sunflowers" aria-hidden="true">
+
+            <div class="starry-spread-content">
+                <h2 class="starry-title">Under Our Starry Sunflower Sky 🌙</h2>
+                <p class="starry-quote"> and that's the beginning"</p>
+
+                <!-- Horizontal Starry Cards Track -->
+                <div id="starry-track" class="starry-cards-track">
+                    <!-- Dynamically injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================
+             SECTION 4: CANDID MOVING TAPES - VIDEOS (NO TEXT BELOW)
+             ========================================= -->
+        <section class="videos-reel-section">
+            <div class="filmstrip-header-row">
+                <span class="filmstrip-brand-label">Candid Smiles in Motion 📹</span>
+                <span class="filmstrip-swipe-pill">Continuous Reel ✨</span>
+            </div>
+
+            <!-- Horizontal Videos Track -->
+            <div id="videos-track" class="videos-horizontal-track">
+                <!-- Dynamically injected via JS -->
+            </div>
+        </section>
+
+        <!-- =========================================
+             SECTION 5: PINTEREST MOOD BOARD (ALL REMAINING PHOTOS, NO TEXT BELOW)
+             ========================================= -->
+        <section class="moodboard-section">
+            <div class="moodboard-header">
+                <h3 class="moodboard-title">Moments of Us ✨</h3>
+            </div>
+
+            <!-- Masonry Photo Grid -->
+            <div id="moodboard-grid" class="moodboard-grid">
+                <!-- Dynamically injected via JS -->
+            </div>
+        </section>
+
+        <!-- =========================================
+             SECTION 6: MAKE A BIRTHDAY WISH CAKE
+             ========================================= -->
+        <section id="cake-section" class="cake-section">
+            <h3 class="cake-header-title">Make a Birthday Wish 🎂</h3>
+            <p class="cake-header-sub">Close your eyes, make your silent wish, and tap the candle light to blow it out.</p>
+
+            <div class="cake-stage">
+                <!-- Candle & Flame -->
+                <div class="candle-wrapper">
+                    <div id="candle-flame" class="candle-flame" title="Tap the candle flame to make a wish!"></div>
+                    <div id="candle-smoke" class="candle-smoke"></div>
+                    <div class="candle-stick"></div>
+                </div>
+
+                <!-- Illustrated Cake SVG -->
+                <svg class="cake-body-svg" viewBox="0 0 140 90">
+                    <ellipse cx="70" cy="84" rx="64" ry="6" fill="#E0D6C8"/>
+                    <path d="M22 55 Q70 65 118 55 L118 80 Q70 90 22 80 Z" fill="#FFF8EE" stroke="#E6D3B8" stroke-width="1.5"/>
+                    <path d="M22 55 Q70 65 118 55 Q70 45 22 55 Z" fill="#FFE0B2"/>
+                    <path d="M38 30 Q70 38 102 30 L102 52 Q70 60 38 52 Z" fill="#FFFDF8" stroke="#E6D3B8" stroke-width="1.5"/>
+                    <path d="M38 30 Q70 38 102 30 Q70 22 38 30 Z" fill="#FFF3E0"/>
+                    <circle cx="50" cy="35" r="4" fill="#FFB300"/>
+                    <circle cx="70" cy="36" r="4" fill="#FFB300"/>
+                    <circle cx="90" cy="35" r="4" fill="#FFB300"/>
+                    <circle cx="35" cy="58" r="5" fill="#FFA000"/>
+                    <circle cx="60" cy="62" r="5" fill="#FFA000"/>
+                    <circle cx="85" cy="62" r="5" fill="#FFA000"/>
+                    <circle cx="105" cy="58" r="5" fill="#FFA000"/>
+                </svg>
+            </div>
+
+            <p id="wish-prompt" class="wish-prompt-text">Tap the candle flame to blow it out & reveal your surprise ✨</p>
+
+            <div id="wish-celebration" class="wish-celebration hidden">
+                <h4 class="wish-celebration-title">Happy Birthday, My Sunflower! 🎉🌻</h4>
+                <p class="wish-celebration-p">May every single sweet dream you wished for today blossom into reality.</p>
+            </div>
+        </section>
+
+        <!-- Footer Sign-off -->
+        <footer class="site-footer">
+            <p class="footer-quote">"Always facing your light 🌻"</p>
+            <p class="footer-small">Made with all my heart for your birthday • Nov 13, 2026</p>
+        </footer>
+
+    </div>
+
+    <!-- =========================================
+         CINEMATIC FULLSCREEN LIGHTBOX
+         ========================================= -->
+    <div id="lightbox-modal" class="lightbox-modal" role="dialog" aria-hidden="true">
+        <div class="lightbox-topbar">
+            <div id="lightbox-counter" class="lightbox-counter">1 / 102</div>
+            <button id="lightbox-close" class="lightbox-close-btn" aria-label="Close Lightbox">✕</button>
+        </div>
+
+        <div class="lightbox-media-container">
+            <button id="lightbox-prev" class="lightbox-nav-btn prev" aria-label="Previous Memory">‹</button>
+            <div id="lightbox-media"></div>
+            <button id="lightbox-next" class="lightbox-nav-btn next" aria-label="Next Memory">›</button>
+        </div>
+    </div>
+
+    <!-- =========================================
+         INTERACTIVE LOVE LETTER MODAL
+         ========================================= -->
+    <div id="letter-modal" class="letter-modal" role="dialog" aria-hidden="true">
+        <div class="letter-modal-inner">
+            <button id="letter-close" class="letter-close-btn" aria-label="Close Letter">✕</button>
+
+            <h3 class="letter-salutation">My Dearest Cutie,</h3>
+            
+            <p class="letter-paragraph">
+                Looking back at where we started—just two people talking, sharing laughs, smiling at our phones until 2 in the morning—I never imagined we would end up here.
+            </p>
+
+            <p class="letter-paragraph">
+                And then came that day. That moment we crossed the line, when we kissed, when everything shifted and words became completely unnecessary.
+            </p>
+
+            <p class="letter-paragraph">
+                We haven’t said those three words out loud yet. We never had to. Every glance, every touch, every quiet moment has already said it a thousand times over.
+            </p>
+
+            <p class="letter-paragraph">
+                You love sunflowers more than anything in this world. And just like a sunflower turns toward the warmth of the sun no matter what...
+            </p>
+            <p class="letter-paragraph">
+                Whatever decision comes next for us—whether this road leads somewhere bright or somewhere else entirely we never wanted to — just be ready for it. No matter how it ends, I'm glad we happened.
+            </p>
+
+            <p class="letter-paragraph">
+                Happy Birthday , Bangaram.
+            </p>
+
+            <div class="letter-signature">🕷️🕸️🌻💛</div>
+        </div>
+    </div>
+
+    <!-- Continuous Romantic Ambient Soundtrack -->
+    <audio id="bg-audio" src="assets/music/Phillip%20Phillips%20-%20Gone%2C%20Gone%2C%20Gone.mp3" preload="auto" loop playsinline></audio>
+
+    <!-- Application Scripts -->
+    <script src="assets/data.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/petals.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
