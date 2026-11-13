@@ -577,7 +577,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const birthdayGameStorageKey = 'sunflower24BirthdayGame_v5';
     const birthdayGameBoxCount = 24;
     const candlePressTarget = 13;
-    const birthdayGameTestMode = true;
     let birthdayGameCountdown = null;
     let birthdayGameIntroTimer = null;
     let birthdayGameBusy = true;
@@ -714,10 +713,9 @@ document.addEventListener('DOMContentLoaded', () => {
         shuffleBirthdayGameBoxes().forEach((boxId, slot) => {
             const box = document.createElement('button');
             const crossed = birthdayGameState.crossed.includes(boxId);
-            const isAnswer = birthdayGameTestMode && boxId === birthdayGameState.targetId;
             box.type = 'button';
-            box.className = `birthday-game-box${crossed ? ' crossed' : ''}${isAnswer ? ' test-answer' : ''}`;
-            box.textContent = crossed ? '❌' : isAnswer ? '✅' : '🎁';
+            box.className = `birthday-game-box${crossed ? ' crossed' : ''}`;
+            box.textContent = crossed ? '❌' : '🎁';
             box.disabled = birthdayGameBusy || crossed;
             box.setAttribute('aria-label', crossed ? 'Already tried, crossed out' : `Mystery box ${slot + 1}`);
             box.addEventListener('click', () => pickBirthdayGameBox(box, boxId));

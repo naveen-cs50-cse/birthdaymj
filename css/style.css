@@ -456,13 +456,6 @@ body {
     font-size: clamp(24px, 7vw, 34px);
 }
 
-.birthday-game-box.test-answer {
-    background: linear-gradient(145deg, #E8F8D8, #B8E58A);
-    border-color: #70A83B;
-    color: #38751D;
-    box-shadow: 0 4px 0 #70A83B;
-}
-
 .birthday-game-counter {
     display: flex;
     justify-content: space-between;
