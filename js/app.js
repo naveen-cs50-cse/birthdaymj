@@ -298,13 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const letterClose = document.getElementById('letter-close');
     const openLetterBtns = document.querySelectorAll('.btn-open-letter');
 
-    // Cake Elements
-    const candleFlame = document.getElementById('candle-flame');
-    const candleSmoke = document.getElementById('candle-smoke');
-    const wishPrompt = document.getElementById('wish-prompt');
-    const wishCelebration = document.getElementById('wish-celebration');
-    let candleBlown = false;
-
     // Audio State Sync
     window.onAudioStateChange = (playing) => {
         if (audioDisc) audioDisc.classList.add('spinning');
@@ -555,41 +548,5 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     });
 
-    // 8. Birthday Cake & Candle -> Opens the Unspoken Love Letter as Birthday Wish!
-    if (candleFlame) {
-        candleFlame.addEventListener('click', () => {
-            if (candleBlown) {
-                // If already blown out, tapping re-opens the letter
-                if (letterModal) {
-                    letterModal.classList.add('is-open');
-                    document.body.style.overflow = 'hidden';
-                    window.romanticAudio.playWaxSealCrack();
-                }
-                return;
-            }
-            candleBlown = true;
-
-            // 1. Play candle blow out sound FX & animate flame/smoke
-            window.romanticAudio.playCandleBlow();
-            candleFlame.classList.add('blown-out');
-            if (candleSmoke) candleSmoke.classList.add('active');
-
-            // 2. Trigger painterly petal celebration confetti
-            canvasEngine.triggerBirthdayConfetti();
-
-            // 3. Update prompt
-            if (wishPrompt) {
-                wishPrompt.textContent = 'Your wish is in my heart... ✨ Opening your letter...';
-            }
-
-            // 4. Smoothly open the Unspoken Love Letter as her birthday wish surprise!
-            setTimeout(() => {
-                if (letterModal) {
-                    letterModal.classList.add('is-open');
-                    document.body.style.overflow = 'hidden';
-                    window.romanticAudio.playWaxSealCrack();
-                }
-            }, 750);
-        });
-    }
+    // Candle interaction is temporarily disabled.
 });
