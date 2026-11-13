@@ -456,13 +456,6 @@ body {
     font-size: clamp(24px, 7vw, 34px);
 }
 
-.birthday-game-box.test-answer {
-    background: linear-gradient(145deg, #E8F8D8, #B8E58A);
-    border-color: #70A83B;
-    color: #38751D;
-    box-shadow: 0 4px 0 #70A83B;
-}
-
 .birthday-game-counter {
     display: flex;
     justify-content: space-between;
@@ -1461,6 +1454,32 @@ body {
     align-items: center;
     cursor: pointer;
     margin-bottom: -2px;
+}
+
+.candle-game-btn {
+    display: none;
+    margin-top: 12px;
+    border: 1px solid rgba(217, 119, 6, 0.45);
+    border-radius: 18px;
+    padding: 11px 16px;
+    background: linear-gradient(135deg, #FFF8D6, #FFD54F);
+    color: var(--sunflower-dark);
+    box-shadow: 0 8px 18px rgba(217, 119, 6, 0.2);
+    font: 700 0.88rem var(--font-sans);
+    cursor: pointer;
+}
+
+.candle-wrapper.game-ready .candle-flame {
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+.candle-wrapper.game-ready .candle-game-btn {
+    display: block;
+}
+
+.candle-game-btn:active {
+    transform: scale(0.96);
 }
 
 .candle-flame {

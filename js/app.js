@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const candleWrapper = document.querySelector('.candle-wrapper');
     const candleFlame = document.getElementById('candle-flame');
-    const wishPrompt = document.getElementById('wish-prompt');
+    const candleGameBtn = document.getElementById('candle-game-btn');
     const birthdayMessageDisplay = document.getElementById('birthday-message-display');
     const birthdayMessageModal = document.getElementById('birthday-message-modal');
     const birthdayMessageInput = document.getElementById('birthday-message-input');
@@ -574,8 +574,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 8. Birthday Letter Game
     const birthdayGameStorageKey = 'sunflower24BirthdayGame_v1';
     const birthdayGameBoxCount = 24;
-    const candlePressTarget = 13;
-    const birthdayGameTestMode = true;
     let birthdayGameCountdown = null;
     let birthdayGameIntroTimer = null;
     let birthdayGameBusy = true;
@@ -598,7 +596,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     targetId: Number.isInteger(saved.targetId) ? saved.targetId : 0,
                     introSeen: saved.introSeen === true,
                     candleActivated: saved.candleActivated === true,
-                    candlePresses: Math.min(candlePressTarget, Math.max(0, Number(saved.candlePresses) || 0)),
                     message: typeof saved.message === 'string' ? saved.message : '',
                     won: saved.won === true
                 };
@@ -614,7 +611,6 @@ document.addEventListener('DOMContentLoaded', () => {
             targetId: Math.floor(Math.random() * birthdayGameBoxCount),
             introSeen: false,
             candleActivated: false,
-            candlePresses: 0,
             message: '',
             won: false
         };
@@ -625,6 +621,16 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem(birthdayGameStorageKey, JSON.stringify(birthdayGameState));
         } catch (error) {
             console.warn('Birthday game state could not be saved.', error);
+        }
+    }
+
+    function requestPersistentBirthdayStorage() {
+        try {
+            if (navigator.storage?.persist) {
+                navigator.storage.persist().catch(() => {});
+            }
+        } catch (error) {
+            console.warn('Persistent birthday message storage is unavailable.', error);
         }
     }
 
@@ -663,10 +669,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         birthdayGameState.message = message;
         saveBirthdayGameState();
+        requestPersistentBirthdayStorage();
         renderBirthdayMessage();
         birthdayMessageModal.classList.add('hidden');
         birthdayMessageModal.setAttribute('aria-hidden', 'true');
         closeBirthdayGame();
+        openBirthdayLetter();
+    }
+
+    function openBirthdayLetter() {
         letterModal.classList.add('is-open');
         letterModal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
@@ -699,10 +710,9 @@ document.addEventListener('DOMContentLoaded', () => {
         shuffleBirthdayGameBoxes().forEach((boxId, slot) => {
             const box = document.createElement('button');
             const crossed = birthdayGameState.crossed.includes(boxId);
-            const isAnswer = birthdayGameTestMode && boxId === birthdayGameState.targetId;
             box.type = 'button';
-            box.className = `birthday-game-box${crossed ? ' crossed' : ''}${isAnswer ? ' test-answer' : ''}`;
-            box.textContent = crossed ? '❌' : isAnswer ? '✅' : '🎁';
+            box.className = `birthday-game-box${crossed ? ' crossed' : ''}`;
+            box.textContent = crossed ? '❌' : '🎁';
             box.disabled = birthdayGameBusy || crossed;
             box.setAttribute('aria-label', crossed ? 'Already tried, crossed out' : `Mystery box ${slot + 1}`);
             box.addEventListener('click', () => pickBirthdayGameBox(box, boxId));
@@ -744,16 +754,9 @@ document.addEventListener('DOMContentLoaded', () => {
         birthdayGameModal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
 
-        if (birthdayGameState.won && birthdayGameState.message) {
-            closeBirthdayGame();
-            letterModal.classList.add('is-open');
-            letterModal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-            return;
-        }
-
         if (birthdayGameState.won) {
-            showBirthdayGameWin();
+            closeBirthdayGame();
+            openBirthdayLetter();
             return;
         }
 
@@ -885,36 +888,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     birthdayGameState = loadBirthdayGameState();
     renderBirthdayMessage();
+    requestPersistentBirthdayStorage();
 
     if (birthdayGameState.candleActivated && gateScreen) {
         gateUnlocked = true;
         gateScreen.classList.add('unlocked');
         gateScreen.style.display = 'none';
-        setTimeout(openBirthdayGame, 0);
+        setTimeout(() => {
+            if (birthdayGameState.won) openBirthdayLetter();
+            else openBirthdayGame();
+        }, 0);
     }
 
     if (candleFlame && candleWrapper) {
         candleFlame.addEventListener('click', () => {
             if (birthdayGameState.candleActivated) return;
-
-            birthdayGameState.candlePresses += 1;
-            if (wishPrompt) {
-                wishPrompt.textContent = birthdayGameState.candlePresses < candlePressTarget
-                    ? `Make your wish... ${birthdayGameState.candlePresses}/${candlePressTarget} 🌻`
-                    : 'Your wish is ready... 💌';
-            }
-
-            if (birthdayGameState.candlePresses < candlePressTarget) {
-                saveBirthdayGameState();
-                return;
-            }
-
             birthdayGameState.candleActivated = true;
             saveBirthdayGameState();
-            openBirthdayGame();
+            requestPersistentBirthdayStorage();
+            candleWrapper.classList.add('game-ready');
         });
     }
 
+    if (candleGameBtn) {
+        candleGameBtn.addEventListener('click', () => {
+            if (birthdayGameState.won) openBirthdayLetter();
+            else openBirthdayGame();
+        });
+    }
     if (birthdayGameClose) birthdayGameClose.addEventListener('click', closeBirthdayGame);
     if (birthdayMessageSubmit) birthdayMessageSubmit.addEventListener('click', submitBirthdayMessage);
 
