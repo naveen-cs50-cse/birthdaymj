@@ -568,10 +568,13 @@ document.addEventListener('DOMContentLoaded', () => {
     letterClose.addEventListener('click', () => {
         letterModal.classList.remove('is-open');
         document.body.style.overflow = '';
+        if (birthdayGameState?.won) {
+            resetBirthdayGameForNextRound();
+        }
     });
 
     // 8. Birthday Letter Game
-    const birthdayGameStorageKey = 'sunflower24BirthdayGame_v3';
+    const birthdayGameStorageKey = 'sunflower24BirthdayGame_v4';
     const birthdayGameBoxCount = 24;
     const candlePressTarget = 13;
     let birthdayGameCountdown = null;
@@ -624,6 +627,16 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.warn('Birthday game state could not be saved.', error);
         }
+    }
+
+    function resetBirthdayGameForNextRound() {
+        birthdayGameState.round = 1;
+        birthdayGameState.lockedUntil = 0;
+        birthdayGameState.crossed = [];
+        birthdayGameState.targetId = Math.floor(Math.random() * birthdayGameBoxCount);
+        birthdayGameState.won = false;
+        birthdayGameState.message = '';
+        saveBirthdayGameState();
     }
 
     function requestPersistentBirthdayStorage() {
@@ -883,6 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         localStorage.removeItem('sunflower24BirthdayGame_v1');
         localStorage.removeItem('sunflower24BirthdayGame_v2');
+        localStorage.removeItem('sunflower24BirthdayGame_v3');
     } catch (error) {
         console.warn('Old birthday game state could not be cleared.', error);
     }
