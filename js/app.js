@@ -592,6 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     targetId: Number.isInteger(saved.targetId) ? saved.targetId : 0,
                     introSeen: saved.introSeen === true,
                     candleActivated: saved.candleActivated === true,
+                    memoryMode: saved.memoryMode === true,
                     won: saved.won === true
                 };
             }
@@ -606,6 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
             targetId: Math.floor(Math.random() * birthdayGameBoxCount),
             introSeen: false,
             candleActivated: false,
+            memoryMode: false,
             won: false
         };
     }
@@ -719,7 +721,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function closeBirthdayGame() {
+    function closeBirthdayGame(returnToMemories = true) {
         clearInterval(birthdayGameCountdown);
         clearInterval(birthdayGameIntroTimer);
         birthdayGameModal.classList.remove('is-open');
@@ -727,6 +729,11 @@ document.addEventListener('DOMContentLoaded', () => {
         birthdayGameIntro.classList.add('hidden');
         birthdayGameWin.classList.add('hidden');
         document.body.style.overflow = '';
+
+        if (returnToMemories && birthdayGameState.candleActivated) {
+            birthdayGameState.memoryMode = true;
+            saveBirthdayGameState();
+        }
     }
 
     function flashBirthdayGameRed() {
@@ -810,7 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             birthdayGameWin.classList.add('hidden');
             birthdayGameWin.setAttribute('aria-hidden', 'true');
-            closeBirthdayGame();
+            closeBirthdayGame(false);
             letterModal.classList.add('is-open');
             letterModal.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
@@ -820,9 +827,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     birthdayGameState = loadBirthdayGameState();
 
+    if (birthdayGameState.candleActivated && !birthdayGameState.memoryMode && gateScreen) {
+        gateUnlocked = true;
+        gateScreen.classList.add('unlocked');
+        gateScreen.style.display = 'none';
+        setTimeout(openBirthdayGame, 0);
+    }
+
     if (candleFlame && candleWrapper) {
         candleFlame.addEventListener('click', () => {
             birthdayGameState.candleActivated = true;
+            birthdayGameState.memoryMode = false;
             saveBirthdayGameState();
             openBirthdayGame();
         });
