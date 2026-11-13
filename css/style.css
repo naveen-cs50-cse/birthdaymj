@@ -330,6 +330,295 @@ body {
 }
 
 /* =========================================
+   BIRTHDAY LETTER GAME
+   ========================================= */
+.candle-game-btn {
+    display: none;
+    position: relative;
+    z-index: 4;
+    max-width: 230px;
+    border: 1px solid rgba(217, 119, 6, 0.45);
+    border-radius: 18px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #FFF8D6, #FFD54F);
+    color: var(--sunflower-dark);
+    box-shadow: 0 8px 18px rgba(217, 119, 6, 0.2);
+    font: 700 0.92rem var(--font-sans);
+    cursor: pointer;
+    animation: candle-button-in 0.45s var(--ease-spring);
+}
+
+.candle-wrapper.game-ready .candle-game-btn {
+    display: block;
+}
+
+.candle-wrapper.game-ready .candle-flame {
+    display: none;
+}
+
+.candle-game-btn:active {
+    transform: scale(0.96);
+}
+
+@keyframes candle-button-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.birthday-game-modal,
+.birthday-game-intro,
+.birthday-game-win,
+.birthday-game-flash {
+    position: fixed;
+    inset: 0;
+}
+
+.birthday-game-modal {
+    z-index: 10050;
+    display: none;
+    overflow-y: auto;
+    padding: max(20px, env(safe-area-inset-top)) 14px max(28px, env(safe-area-inset-bottom));
+    background: linear-gradient(160deg, #FFF9E9, #FFEDBD);
+}
+
+.birthday-game-modal.is-open {
+    display: block;
+}
+
+.birthday-game-shell {
+    width: min(100%, 440px);
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    color: #76551E;
+}
+
+.birthday-game-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 38px;
+    height: 38px;
+    border: 1px solid #EFD995;
+    border-radius: 50%;
+    background: rgba(255, 253, 246, 0.88);
+    color: #80591C;
+    font-size: 1.05rem;
+    cursor: pointer;
+}
+
+.birthday-game-view {
+    padding: 18px 0 8px;
+}
+
+.birthday-game-sun {
+    margin: 0 0 5px;
+    font-size: 3rem;
+    animation: birthday-game-sway 3s ease-in-out infinite;
+}
+
+.birthday-game-kicker {
+    color: #A77B2C;
+    font: 800 0.64rem var(--font-sans);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.birthday-game-title {
+    margin: 9px 36px 8px;
+    color: #80591C;
+    font: 700 2rem/1.1 var(--font-serif);
+}
+
+.birthday-game-copy,
+.birthday-game-card p,
+.birthday-game-lock p {
+    color: #806B4B;
+    font-size: 0.86rem;
+}
+
+.birthday-game-card {
+    margin-top: 18px;
+    padding: 20px 14px 16px;
+    border: 1px solid #EFD995;
+    border-radius: 23px;
+    background: #FFFDF6;
+    box-shadow: 0 12px 35px rgba(139, 104, 27, 0.1);
+}
+
+.birthday-game-card h3 {
+    margin: 7px 0 5px;
+    color: #80591C;
+    font: 700 1.5rem var(--font-serif);
+}
+
+.birthday-game-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 9px;
+    margin: 18px 0 12px;
+}
+
+.birthday-game-box {
+    aspect-ratio: 1;
+    border: 1px solid #E4C477;
+    border-radius: 13px;
+    background: linear-gradient(145deg, #FFF0C5, #EDCE7D);
+    color: #A47623;
+    box-shadow: 0 4px 0 #D8B968;
+    font-size: clamp(21px, 6vw, 29px);
+    cursor: pointer;
+    transition: transform 0.12s, filter 0.12s;
+}
+
+.birthday-game-box:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #D8B968;
+}
+
+.birthday-game-box:disabled {
+    cursor: default;
+}
+
+.birthday-game-box.crossed {
+    background: linear-gradient(145deg, #F3E4E1, #E9CBC5);
+    border-color: #D8AAA0;
+    color: #BD4A4A;
+    box-shadow: 0 4px 0 #D3AAA1;
+    font-size: clamp(24px, 7vw, 34px);
+}
+
+.birthday-game-counter {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: #A17C3C;
+    font: 700 0.62rem var(--font-sans);
+    letter-spacing: 0.05em;
+}
+
+.birthday-game-note {
+    min-height: 19px;
+    margin: 10px 0 0;
+    color: #A17C3C !important;
+    font-size: 0.72rem !important;
+}
+
+.birthday-game-lock {
+    padding-top: 16vh;
+}
+
+.birthday-game-lock h2,
+.birthday-game-win h2,
+.birthday-game-intro h2 {
+    margin: 8px 0;
+    color: #80591C;
+    font: 700 1.8rem var(--font-serif);
+}
+
+.birthday-game-timer {
+    margin: 17px 0;
+    color: #986A20;
+    font: 700 2.25rem 'Courier New', monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.birthday-game-intro {
+    z-index: 10070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    background: rgba(255, 243, 216, 0.97);
+    opacity: 1;
+    transition: opacity 0.25s ease;
+}
+
+.birthday-game-intro.fade {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.birthday-game-intro-inner {
+    max-width: 330px;
+    text-align: center;
+}
+
+.birthday-game-intro-sun {
+    font-size: 4.2rem;
+}
+
+.birthday-game-intro p,
+.birthday-game-win p {
+    color: #806B4B;
+    font-size: 1rem;
+}
+
+.birthday-game-flash {
+    z-index: 10080;
+    background: #F12F3D;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.birthday-game-flash.flash {
+    animation: birthday-game-red-flash 0.48s ease-out;
+}
+
+@keyframes birthday-game-red-flash {
+    0% { opacity: 0; }
+    18% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.birthday-game-win {
+    z-index: 10090;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 22px;
+    background: radial-gradient(circle, #FFF8D9, #FFDF86);
+    text-align: center;
+}
+
+.birthday-game-win-content {
+    position: relative;
+    z-index: 2;
+    max-width: 360px;
+}
+
+.birthday-game-win .birthday-game-intro-sun {
+    font-size: 4.5rem;
+}
+
+.birthday-game-falling-sun {
+    position: absolute;
+    top: -50px;
+    font-size: 1.65rem;
+    animation: birthday-game-fall linear forwards;
+    pointer-events: none;
+}
+
+@keyframes birthday-game-fall {
+    to { transform: translateY(115vh) rotate(540deg); opacity: 0.2; }
+}
+
+@keyframes birthday-game-sway {
+    50% { transform: rotate(6deg) translateY(-4px); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 360px) {
+    .birthday-game-grid { gap: 7px; }
+    .birthday-game-card { padding: 18px 11px 14px; }
+    .birthday-game-box { border-radius: 10px; }
+}
+
+/* =========================================
    1. TOP ISLAND & MUSIC PLAYER
    ========================================= */
 .top-island-bar {

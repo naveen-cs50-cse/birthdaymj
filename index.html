@@ -195,6 +195,7 @@
                 <!-- Candle & Flame -->
                 <div class="candle-wrapper">
                     <div id="candle-flame" class="candle-flame" title="🌻"></div>
+                    <button id="candle-game-btn" class="candle-game-btn" type="button">Find your birthday letter 🌻</button>
                     <div id="candle-smoke" class="candle-smoke"></div>
                     <div class="candle-stick"></div>
                 </div>
@@ -223,6 +224,62 @@
                 <p class="wish-celebration-p">May every single sweet dream you wished for today blossom into reality.</p>
             </div>
         </section>
+
+        <!-- =========================================
+             SECTION 7: FIND THE BIRTHDAY LETTER GAME
+             ========================================= -->
+        <div id="birthday-game-modal" class="birthday-game-modal" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="birthday-game-shell">
+                <button id="birthday-game-close" class="birthday-game-close" type="button" aria-label="Close birthday game">✕</button>
+
+                <div id="birthday-game-board" class="birthday-game-view">
+                    <div class="birthday-game-sun">🌻</div>
+                    <div class="birthday-game-kicker">A TINY BIRTHDAY CHALLENGE</div>
+                    <h2 class="birthday-game-title">Find your birthday letter 💌</h2>
+                    <p class="birthday-game-copy">There are 24 boxes, but only one has your letter. You get one pick each round. 💛</p>
+
+                    <div class="birthday-game-card">
+                        <div id="birthday-game-round" class="birthday-game-kicker">ROUND 1</div>
+                        <h3>Choose a box</h3>
+                        <p id="birthday-game-instruction">Pick carefully, my little sunflower.</p>
+                        <div id="birthday-game-grid" class="birthday-game-grid"></div>
+                        <div class="birthday-game-counter">
+                            <span id="birthday-game-chance">CHANCE LEFT: 1</span>
+                            <span>24 MYSTERY BOXES</span>
+                        </div>
+                        <p id="birthday-game-note" class="birthday-game-note" aria-live="polite"></p>
+                    </div>
+                </div>
+
+                <div id="birthday-game-lock" class="birthday-game-view birthday-game-lock hidden">
+                    <div class="birthday-game-sun">🌻</div>
+                    <div class="birthday-game-kicker">A LITTLE WAITING TIME</div>
+                    <h2>Ayyo, mwahhh Ammulu 💛</h2>
+                    <p>You picked the wrong box. All the best for next round, try better!</p>
+                    <div id="birthday-game-timer" class="birthday-game-timer">01:00</div>
+                    <p id="birthday-game-wait-text">Your next try will be ready soon.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="birthday-game-intro" class="birthday-game-intro hidden" aria-hidden="true">
+            <div class="birthday-game-intro-inner">
+                <div class="birthday-game-intro-sun">🎁🌻</div>
+                <h2>All boxes shuffled!</h2>
+                <p>Choose one box. You have only one chance. Ready?</p>
+                <div id="birthday-game-intro-count" class="birthday-game-kicker">GET READY · 3</div>
+            </div>
+        </div>
+
+        <div id="birthday-game-flash" class="birthday-game-flash" aria-hidden="true"></div>
+        <div id="birthday-game-win" class="birthday-game-win hidden" aria-hidden="true">
+            <div class="birthday-game-win-content">
+                <div class="birthday-game-intro-sun">🌻💛🌻</div>
+                <div class="birthday-game-kicker">THE LUCKY BOX!</div>
+                <h2>You found the letter!</h2>
+                <p>Look at all that sunshine! Your birthday surprise is here. 💌</p>
+            </div>
+        </div>
 
         <!-- Footer Sign-off -->
         <footer class="site-footer">

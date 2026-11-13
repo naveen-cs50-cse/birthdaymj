@@ -298,6 +298,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const letterClose = document.getElementById('letter-close');
     const openLetterBtns = document.querySelectorAll('.btn-open-letter');
 
+    const candleWrapper = document.querySelector('.candle-wrapper');
+    const candleFlame = document.getElementById('candle-flame');
+    const candleGameBtn = document.getElementById('candle-game-btn');
+    const birthdayGameModal = document.getElementById('birthday-game-modal');
+    const birthdayGameClose = document.getElementById('birthday-game-close');
+    const birthdayGameBoard = document.getElementById('birthday-game-board');
+    const birthdayGameLock = document.getElementById('birthday-game-lock');
+    const birthdayGameGrid = document.getElementById('birthday-game-grid');
+    const birthdayGameRound = document.getElementById('birthday-game-round');
+    const birthdayGameChance = document.getElementById('birthday-game-chance');
+    const birthdayGameInstruction = document.getElementById('birthday-game-instruction');
+    const birthdayGameNote = document.getElementById('birthday-game-note');
+    const birthdayGameTimer = document.getElementById('birthday-game-timer');
+    const birthdayGameWaitText = document.getElementById('birthday-game-wait-text');
+    const birthdayGameIntro = document.getElementById('birthday-game-intro');
+    const birthdayGameIntroCount = document.getElementById('birthday-game-intro-count');
+    const birthdayGameFlash = document.getElementById('birthday-game-flash');
+    const birthdayGameWin = document.getElementById('birthday-game-win');
+
     // Audio State Sync
     window.onAudioStateChange = (playing) => {
         if (audioDisc) audioDisc.classList.add('spinning');
@@ -548,5 +567,278 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     });
 
-    // Candle interaction is temporarily disabled.
+    // 8. Birthday Letter Game
+    const birthdayGameStorageKey = 'sunflower24BirthdayGame_v1';
+    const birthdayGameBoxCount = 24;
+    const birthdayGameFirstWaitMs = 60 * 1000;
+    let birthdayGameCountdown = null;
+    let birthdayGameIntroTimer = null;
+    let birthdayGameBusy = true;
+    let birthdayGameState = null;
+
+    function randomGameBox(excluded) {
+        const available = Array.from({ length: birthdayGameBoxCount }, (_, id) => id)
+            .filter(id => !excluded.includes(id));
+        return available[Math.floor(Math.random() * available.length)];
+    }
+
+    function loadBirthdayGameState() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(birthdayGameStorageKey));
+            if (saved && Array.isArray(saved.crossed)) {
+                return {
+                    round: Math.max(1, Number(saved.round) || 1),
+                    lockedUntil: Number(saved.lockedUntil) || 0,
+                    crossed: [...new Set(saved.crossed)].filter(id => id >= 0 && id < birthdayGameBoxCount),
+                    targetId: Number.isInteger(saved.targetId) ? saved.targetId : 0,
+                    introSeen: saved.introSeen === true,
+                    candleActivated: saved.candleActivated === true,
+                    won: saved.won === true
+                };
+            }
+        } catch (error) {
+            console.warn('Birthday game state could not be loaded.', error);
+        }
+
+        return {
+            round: 1,
+            lockedUntil: 0,
+            crossed: [],
+            targetId: Math.floor(Math.random() * birthdayGameBoxCount),
+            introSeen: false,
+            candleActivated: false,
+            won: false
+        };
+    }
+
+    function saveBirthdayGameState() {
+        try {
+            localStorage.setItem(birthdayGameStorageKey, JSON.stringify(birthdayGameState));
+        } catch (error) {
+            console.warn('Birthday game state could not be saved.', error);
+        }
+    }
+
+    function shuffleBirthdayGameBoxes() {
+        const boxes = Array.from({ length: birthdayGameBoxCount }, (_, id) => id);
+        for (let index = boxes.length - 1; index > 0; index--) {
+            const swapIndex = Math.floor(Math.random() * (index + 1));
+            [boxes[index], boxes[swapIndex]] = [boxes[swapIndex], boxes[index]];
+        }
+        return boxes;
+    }
+
+    function setBirthdayGameView(view) {
+        birthdayGameBoard.classList.toggle('hidden', view !== 'board');
+        birthdayGameLock.classList.toggle('hidden', view !== 'lock');
+    }
+
+    function buildBirthdayGameRound() {
+        birthdayGameGrid.innerHTML = '';
+        birthdayGameRound.textContent = `ROUND ${birthdayGameState.round}`;
+        birthdayGameChance.textContent = 'CHANCE LEFT: 1';
+        birthdayGameInstruction.textContent = 'Pick carefully, my little sunflower.';
+        birthdayGameNote.textContent = birthdayGameState.crossed.length
+            ? `${birthdayGameState.crossed.length} box${birthdayGameState.crossed.length === 1 ? '' : 'es'} already crossed out.`
+            : '';
+
+        shuffleBirthdayGameBoxes().forEach((boxId, slot) => {
+            const box = document.createElement('button');
+            const crossed = birthdayGameState.crossed.includes(boxId);
+            box.type = 'button';
+            box.className = `birthday-game-box${crossed ? ' crossed' : ''}`;
+            box.textContent = crossed ? '❌' : '🎁';
+            box.disabled = birthdayGameBusy || crossed;
+            box.setAttribute('aria-label', crossed ? 'Already tried, crossed out' : `Mystery box ${slot + 1}`);
+            box.addEventListener('click', () => pickBirthdayGameBox(box, boxId));
+            birthdayGameGrid.appendChild(box);
+        });
+    }
+
+    function enableBirthdayGameBoxes() {
+        birthdayGameBusy = false;
+        birthdayGameGrid.querySelectorAll('.birthday-game-box').forEach(box => {
+            if (!box.classList.contains('crossed')) box.disabled = false;
+        });
+    }
+
+    function showBirthdayGameIntro() {
+        birthdayGameBusy = true;
+        birthdayGameIntro.classList.remove('hidden', 'fade');
+        let count = 3;
+        birthdayGameIntroCount.textContent = `GET READY · ${count}`;
+        clearInterval(birthdayGameIntroTimer);
+        birthdayGameIntroTimer = setInterval(() => {
+            count -= 1;
+            if (count > 0) {
+                birthdayGameIntroCount.textContent = `GET READY · ${count}`;
+                return;
+            }
+            clearInterval(birthdayGameIntroTimer);
+            birthdayGameIntro.classList.add('fade');
+            setTimeout(() => {
+                birthdayGameIntro.classList.add('hidden');
+                enableBirthdayGameBoxes();
+            }, 260);
+        }, 1000);
+    }
+
+    function openBirthdayGame() {
+        birthdayGameState = birthdayGameState || loadBirthdayGameState();
+        birthdayGameModal.classList.add('is-open');
+        birthdayGameModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        if (birthdayGameState.won) {
+            showBirthdayGameWin();
+            return;
+        }
+
+        if (birthdayGameState.lockedUntil > Date.now()) {
+            setBirthdayGameView('lock');
+            updateBirthdayGameTimer();
+            clearInterval(birthdayGameCountdown);
+            birthdayGameCountdown = setInterval(updateBirthdayGameTimer, 1000);
+            return;
+        }
+
+        if (birthdayGameState.lockedUntil) {
+            birthdayGameState.lockedUntil = 0;
+            birthdayGameState.round += 1;
+            birthdayGameState.targetId = randomGameBox(birthdayGameState.crossed);
+            saveBirthdayGameState();
+        }
+
+        setBirthdayGameView('board');
+        buildBirthdayGameRound();
+        if (birthdayGameState.introSeen) {
+            enableBirthdayGameBoxes();
+        } else {
+            birthdayGameState.introSeen = true;
+            saveBirthdayGameState();
+            showBirthdayGameIntro();
+        }
+    }
+
+    function closeBirthdayGame() {
+        clearInterval(birthdayGameCountdown);
+        clearInterval(birthdayGameIntroTimer);
+        birthdayGameModal.classList.remove('is-open');
+        birthdayGameModal.setAttribute('aria-hidden', 'true');
+        birthdayGameIntro.classList.add('hidden');
+        birthdayGameWin.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function flashBirthdayGameRed() {
+        birthdayGameFlash.classList.remove('flash');
+        void birthdayGameFlash.offsetWidth;
+        birthdayGameFlash.classList.add('flash');
+    }
+
+    function pickBirthdayGameBox(box, boxId) {
+        if (birthdayGameBusy || box.disabled || birthdayGameState.crossed.includes(boxId)) return;
+        birthdayGameBusy = true;
+        birthdayGameGrid.querySelectorAll('.birthday-game-box').forEach(item => {
+            item.disabled = true;
+        });
+
+        if (boxId === birthdayGameState.targetId) {
+            box.textContent = '💌';
+            birthdayGameState.won = true;
+            saveBirthdayGameState();
+            showBirthdayGameWin();
+            return;
+        }
+
+        flashBirthdayGameRed();
+        birthdayGameState.crossed.push(boxId);
+        birthdayGameState.lockedUntil = Date.now() + birthdayGameFirstWaitMs * (2 ** (birthdayGameState.round - 1));
+        saveBirthdayGameState();
+        box.classList.add('crossed');
+        box.textContent = '❌';
+        birthdayGameChance.textContent = 'CHANCES LEFT: 0';
+        birthdayGameNote.textContent = 'Ayyo, mwahhh Ammulu, all the best for next round, try better!';
+        birthdayGameWaitText.textContent = `Next round in ${birthdayGameFirstWaitMs * (2 ** (birthdayGameState.round - 1)) / 60000} minute${birthdayGameState.round === 1 ? '' : 's'}.`;
+
+        setTimeout(() => {
+            setBirthdayGameView('lock');
+            updateBirthdayGameTimer();
+            clearInterval(birthdayGameCountdown);
+            birthdayGameCountdown = setInterval(updateBirthdayGameTimer, 1000);
+        }, 520);
+    }
+
+    function updateBirthdayGameTimer() {
+        const remaining = Math.max(0, birthdayGameState.lockedUntil - Date.now());
+        if (remaining === 0) {
+            clearInterval(birthdayGameCountdown);
+            birthdayGameState.lockedUntil = 0;
+            birthdayGameState.round += 1;
+            birthdayGameState.targetId = randomGameBox(birthdayGameState.crossed);
+            saveBirthdayGameState();
+            setBirthdayGameView('board');
+            buildBirthdayGameRound();
+            enableBirthdayGameBoxes();
+            return;
+        }
+
+        const totalSeconds = Math.ceil(remaining / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        birthdayGameTimer.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        birthdayGameWaitText.textContent = 'Your next try will be ready soon. 💛';
+    }
+
+    function showBirthdayGameWin() {
+        birthdayGameBusy = true;
+        birthdayGameGrid.querySelectorAll('.birthday-game-box').forEach(box => {
+            box.disabled = true;
+        });
+        birthdayGameWin.classList.remove('hidden');
+        birthdayGameWin.setAttribute('aria-hidden', 'false');
+
+        for (let index = 0; index < 34; index += 1) {
+            const sunflower = document.createElement('div');
+            sunflower.className = 'birthday-game-falling-sun';
+            sunflower.textContent = ['🌻', '🌼', '💛'][Math.floor(Math.random() * 3)];
+            sunflower.style.left = `${Math.random() * 100}vw`;
+            sunflower.style.animationDuration = `${3 + Math.random() * 3}s`;
+            sunflower.style.animationDelay = `${Math.random() * 0.8}s`;
+            birthdayGameWin.appendChild(sunflower);
+        }
+
+        setTimeout(() => {
+            birthdayGameWin.classList.add('hidden');
+            birthdayGameWin.setAttribute('aria-hidden', 'true');
+            closeBirthdayGame();
+            letterModal.classList.add('is-open');
+            letterModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            window.romanticAudio.playWaxSealCrack();
+        }, 2600);
+    }
+
+    birthdayGameState = loadBirthdayGameState();
+
+    if (birthdayGameState.candleActivated && candleWrapper) {
+        candleWrapper.classList.add('game-ready');
+    }
+
+    if (candleFlame && candleWrapper) {
+        candleFlame.addEventListener('click', () => {
+            candleWrapper.classList.add('game-ready');
+            birthdayGameState.candleActivated = true;
+            saveBirthdayGameState();
+        });
+    }
+
+    if (candleGameBtn) candleGameBtn.addEventListener('click', openBirthdayGame);
+    if (birthdayGameClose) birthdayGameClose.addEventListener('click', closeBirthdayGame);
+
+    window.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && birthdayGameModal.classList.contains('is-open')) {
+            closeBirthdayGame();
+        }
+    });
 });
