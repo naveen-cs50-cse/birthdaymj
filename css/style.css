@@ -342,14 +342,15 @@ body {
 
 .birthday-game-modal {
     z-index: 10050;
-    display: none;
+    display: none !important;
+    position: fixed !important;
     overflow-y: auto;
     padding: max(20px, env(safe-area-inset-top)) 14px max(28px, env(safe-area-inset-bottom));
     background: linear-gradient(160deg, #FFF9E9, #FFEDBD);
 }
 
 .birthday-game-modal.is-open {
-    display: block;
+    display: block !important;
 }
 
 .birthday-game-shell {

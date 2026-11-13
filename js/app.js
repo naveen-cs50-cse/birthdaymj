@@ -259,9 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 5. Hide gate after smooth transition
         setTimeout(() => {
             gateScreen.style.display = 'none';
-            if (birthdayGameState?.candleActivated) {
-                openBirthdayGame();
-            }
         }, 850);
     }
 
