@@ -216,7 +216,8 @@
                 </svg>
             </div>
 
-            <p id="wish-prompt" class="wish-prompt-text"> ✨</p>
+            <p id="wish-prompt" class="wish-prompt-text">Tap the candle 13 times to find your letter 🌻</p>
+            <div id="birthday-message-display" class="birthday-message-display hidden"></div>
 
             <div id="wish-celebration" class="wish-celebration hidden">
                 <h4 class="wish-celebration-title">Happy Birthday, My Sunflower! 🎉🌻</h4>
@@ -277,6 +278,16 @@
                 <div class="birthday-game-kicker">THE LUCKY BOX!</div>
                 <h2>You found the letter!</h2>
                 <p>Look at all that sunshine! Your birthday surprise is here. 💌</p>
+            </div>
+        </div>
+
+        <div id="birthday-message-modal" class="birthday-message-modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="birthday-message-card">
+                <div class="birthday-game-intro-sun">💌🌻</div>
+                <div class="birthday-game-kicker">ONE LITTLE THING FIRST</div>
+                <h2>Any message for your “Namp babulu”?? 😬🙆🏻😚❤️</h2>
+                <textarea id="birthday-message-input" rows="4" maxlength="500" placeholder="Write anything you want to say..."></textarea>
+                <button id="birthday-message-submit" class="birthday-message-submit" type="button">Save my message 💛</button>
             </div>
         </div>
 

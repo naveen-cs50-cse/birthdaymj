@@ -300,6 +300,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const candleWrapper = document.querySelector('.candle-wrapper');
     const candleFlame = document.getElementById('candle-flame');
+    const wishPrompt = document.getElementById('wish-prompt');
+    const birthdayMessageDisplay = document.getElementById('birthday-message-display');
+    const birthdayMessageModal = document.getElementById('birthday-message-modal');
+    const birthdayMessageInput = document.getElementById('birthday-message-input');
+    const birthdayMessageSubmit = document.getElementById('birthday-message-submit');
     const birthdayGameModal = document.getElementById('birthday-game-modal');
     const birthdayGameClose = document.getElementById('birthday-game-close');
     const birthdayGameBoard = document.getElementById('birthday-game-board');
@@ -569,7 +574,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 8. Birthday Letter Game
     const birthdayGameStorageKey = 'sunflower24BirthdayGame_v1';
     const birthdayGameBoxCount = 24;
-    const birthdayGameFirstWaitMs = 60 * 1000;
+    const candlePressTarget = 13;
+    const birthdayGameTestMode = true;
     let birthdayGameCountdown = null;
     let birthdayGameIntroTimer = null;
     let birthdayGameBusy = true;
@@ -592,6 +598,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     targetId: Number.isInteger(saved.targetId) ? saved.targetId : 0,
                     introSeen: saved.introSeen === true,
                     candleActivated: saved.candleActivated === true,
+                    candlePresses: Math.min(candlePressTarget, Math.max(0, Number(saved.candlePresses) || 0)),
+                    message: typeof saved.message === 'string' ? saved.message : '',
                     won: saved.won === true
                 };
             }
@@ -606,6 +614,8 @@ document.addEventListener('DOMContentLoaded', () => {
             targetId: Math.floor(Math.random() * birthdayGameBoxCount),
             introSeen: false,
             candleActivated: false,
+            candlePresses: 0,
+            message: '',
             won: false
         };
     }
@@ -616,6 +626,51 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.warn('Birthday game state could not be saved.', error);
         }
+    }
+
+    function getBirthdayGameWaitMinutes(round) {
+        if (round === 1) return 1;
+        if (round === 2) return 60;
+        return 60 * (2 ** (round - 2));
+    }
+
+    function formatBirthdayGameWait(minutes) {
+        if (minutes < 60) return `${minutes} minute${minutes === 1 ? '' : 's'}`;
+        const hours = minutes / 60;
+        return `${hours} hour${hours === 1 ? '' : 's'}`;
+    }
+
+    function renderBirthdayMessage() {
+        if (!birthdayMessageDisplay) return;
+        birthdayMessageDisplay.textContent = birthdayGameState.message;
+        birthdayMessageDisplay.classList.toggle('hidden', !birthdayGameState.message);
+    }
+
+    function showBirthdayMessagePrompt() {
+        birthdayMessageModal.classList.remove('hidden');
+        birthdayMessageModal.setAttribute('aria-hidden', 'false');
+        birthdayMessageInput.value = birthdayGameState.message;
+        document.body.style.overflow = 'hidden';
+        birthdayMessageInput.focus();
+    }
+
+    function submitBirthdayMessage() {
+        const message = birthdayMessageInput.value.trim();
+        if (!message) {
+            birthdayMessageInput.focus();
+            return;
+        }
+
+        birthdayGameState.message = message;
+        saveBirthdayGameState();
+        renderBirthdayMessage();
+        birthdayMessageModal.classList.add('hidden');
+        birthdayMessageModal.setAttribute('aria-hidden', 'true');
+        closeBirthdayGame();
+        letterModal.classList.add('is-open');
+        letterModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        window.romanticAudio.playWaxSealCrack();
     }
 
     function shuffleBirthdayGameBoxes() {
@@ -644,9 +699,10 @@ document.addEventListener('DOMContentLoaded', () => {
         shuffleBirthdayGameBoxes().forEach((boxId, slot) => {
             const box = document.createElement('button');
             const crossed = birthdayGameState.crossed.includes(boxId);
+            const isAnswer = birthdayGameTestMode && boxId === birthdayGameState.targetId;
             box.type = 'button';
-            box.className = `birthday-game-box${crossed ? ' crossed' : ''}`;
-            box.textContent = crossed ? '❌' : '🎁';
+            box.className = `birthday-game-box${crossed ? ' crossed' : ''}${isAnswer ? ' test-answer' : ''}`;
+            box.textContent = crossed ? '❌' : isAnswer ? '✅' : '🎁';
             box.disabled = birthdayGameBusy || crossed;
             box.setAttribute('aria-label', crossed ? 'Already tried, crossed out' : `Mystery box ${slot + 1}`);
             box.addEventListener('click', () => pickBirthdayGameBox(box, boxId));
@@ -687,6 +743,14 @@ document.addEventListener('DOMContentLoaded', () => {
         birthdayGameModal.classList.add('is-open');
         birthdayGameModal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+
+        if (birthdayGameState.won && birthdayGameState.message) {
+            closeBirthdayGame();
+            letterModal.classList.add('is-open');
+            letterModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            return;
+        }
 
         if (birthdayGameState.won) {
             showBirthdayGameWin();
@@ -753,13 +817,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         flashBirthdayGameRed();
         birthdayGameState.crossed.push(boxId);
-        birthdayGameState.lockedUntil = Date.now() + birthdayGameFirstWaitMs * (2 ** (birthdayGameState.round - 1));
+        const waitMinutes = getBirthdayGameWaitMinutes(birthdayGameState.round);
+        birthdayGameState.lockedUntil = Date.now() + waitMinutes * 60 * 1000;
         saveBirthdayGameState();
         box.classList.add('crossed');
         box.textContent = '❌';
         birthdayGameChance.textContent = 'CHANCES LEFT: 0';
         birthdayGameNote.textContent = 'Ayyo, mwahhh Ammulu, all the best for next round, try better!';
-        birthdayGameWaitText.textContent = `Next round in ${birthdayGameFirstWaitMs * (2 ** (birthdayGameState.round - 1)) / 60000} minute${birthdayGameState.round === 1 ? '' : 's'}.`;
+        birthdayGameWaitText.textContent = `Next round in ${formatBirthdayGameWait(waitMinutes)}.`;
 
         setTimeout(() => {
             setBirthdayGameView('lock');
@@ -784,10 +849,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const totalSeconds = Math.ceil(remaining / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
-        birthdayGameTimer.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        birthdayGameWaitText.textContent = 'Your next try will be ready soon. 💛';
+        birthdayGameTimer.textContent = hours > 0
+            ? `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+            : `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        birthdayGameWaitText.textContent = `Next round in ${formatBirthdayGameWait(getBirthdayGameWaitMinutes(birthdayGameState.round))}. 💛`;
     }
 
     function showBirthdayGameWin() {
@@ -811,15 +879,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             birthdayGameWin.classList.add('hidden');
             birthdayGameWin.setAttribute('aria-hidden', 'true');
-            closeBirthdayGame();
-            letterModal.classList.add('is-open');
-            letterModal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-            window.romanticAudio.playWaxSealCrack();
+            showBirthdayMessagePrompt();
         }, 2600);
     }
 
     birthdayGameState = loadBirthdayGameState();
+    renderBirthdayMessage();
 
     if (birthdayGameState.candleActivated && gateScreen) {
         gateUnlocked = true;
@@ -830,6 +895,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (candleFlame && candleWrapper) {
         candleFlame.addEventListener('click', () => {
+            if (birthdayGameState.candleActivated) return;
+
+            birthdayGameState.candlePresses += 1;
+            if (wishPrompt) {
+                wishPrompt.textContent = birthdayGameState.candlePresses < candlePressTarget
+                    ? `Make your wish... ${birthdayGameState.candlePresses}/${candlePressTarget} 🌻`
+                    : 'Your wish is ready... 💌';
+            }
+
+            if (birthdayGameState.candlePresses < candlePressTarget) {
+                saveBirthdayGameState();
+                return;
+            }
+
             birthdayGameState.candleActivated = true;
             saveBirthdayGameState();
             openBirthdayGame();
@@ -837,6 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (birthdayGameClose) birthdayGameClose.addEventListener('click', closeBirthdayGame);
+    if (birthdayMessageSubmit) birthdayMessageSubmit.addEventListener('click', submitBirthdayMessage);
 
     window.addEventListener('keydown', event => {
         if (event.key === 'Escape' && birthdayGameModal.classList.contains('is-open')) {
