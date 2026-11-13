@@ -259,6 +259,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // 5. Hide gate after smooth transition
         setTimeout(() => {
             gateScreen.style.display = 'none';
+            if (birthdayGameState?.candleActivated) {
+                openBirthdayGame();
+            }
         }, 850);
     }
 
@@ -300,7 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const candleWrapper = document.querySelector('.candle-wrapper');
     const candleFlame = document.getElementById('candle-flame');
-    const candleGameBtn = document.getElementById('candle-game-btn');
     const birthdayGameModal = document.getElementById('birthday-game-modal');
     const birthdayGameClose = document.getElementById('birthday-game-close');
     const birthdayGameBoard = document.getElementById('birthday-game-board');
@@ -821,19 +823,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     birthdayGameState = loadBirthdayGameState();
 
-    if (birthdayGameState.candleActivated && candleWrapper) {
-        candleWrapper.classList.add('game-ready');
-    }
-
     if (candleFlame && candleWrapper) {
         candleFlame.addEventListener('click', () => {
-            candleWrapper.classList.add('game-ready');
             birthdayGameState.candleActivated = true;
             saveBirthdayGameState();
+            openBirthdayGame();
         });
     }
 
-    if (candleGameBtn) candleGameBtn.addEventListener('click', openBirthdayGame);
     if (birthdayGameClose) birthdayGameClose.addEventListener('click', closeBirthdayGame);
 
     window.addEventListener('keydown', event => {

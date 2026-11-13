@@ -332,39 +332,6 @@ body {
 /* =========================================
    BIRTHDAY LETTER GAME
    ========================================= */
-.candle-game-btn {
-    display: none;
-    position: relative;
-    z-index: 4;
-    max-width: 230px;
-    border: 1px solid rgba(217, 119, 6, 0.45);
-    border-radius: 18px;
-    padding: 12px 16px;
-    background: linear-gradient(135deg, #FFF8D6, #FFD54F);
-    color: var(--sunflower-dark);
-    box-shadow: 0 8px 18px rgba(217, 119, 6, 0.2);
-    font: 700 0.92rem var(--font-sans);
-    cursor: pointer;
-    animation: candle-button-in 0.45s var(--ease-spring);
-}
-
-.candle-wrapper.game-ready .candle-game-btn {
-    display: block;
-}
-
-.candle-wrapper.game-ready .candle-flame {
-    display: none;
-}
-
-.candle-game-btn:active {
-    transform: scale(0.96);
-}
-
-@keyframes candle-button-in {
-    from { opacity: 0; transform: translateY(8px) scale(0.9); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
 .birthday-game-modal,
 .birthday-game-intro,
 .birthday-game-win,
@@ -397,13 +364,13 @@ body {
     position: absolute;
     top: 0;
     right: 0;
-    width: 38px;
-    height: 38px;
+    min-height: 38px;
+    padding: 8px 13px;
     border: 1px solid #EFD995;
-    border-radius: 50%;
+    border-radius: 20px;
     background: rgba(255, 253, 246, 0.88);
     color: #80591C;
-    font-size: 1.05rem;
+    font: 700 0.72rem var(--font-sans);
     cursor: pointer;
 }
 
