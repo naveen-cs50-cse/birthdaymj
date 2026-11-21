@@ -576,6 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 8. Birthday Letter Game
     const birthdayGameStorageKey = 'sunflower24BirthdayGame_v5';
     const birthdayGameBoxCount = 24;
+    const birthdayGameWrongWaitMs = 3000;
     const candlePressTarget = 13;
     let birthdayGameCountdown = null;
     let birthdayGameIntroTimer = null;
@@ -647,18 +648,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.warn('Persistent birthday message storage is unavailable.', error);
         }
-    }
-
-    function getBirthdayGameWaitMinutes(round) {
-        if (round === 1) return 1;
-        if (round === 2) return 60;
-        return 60 * (2 ** (round - 2));
-    }
-
-    function formatBirthdayGameWait(minutes) {
-        if (minutes < 60) return `${minutes} minute${minutes === 1 ? '' : 's'}`;
-        const hours = minutes / 60;
-        return `${hours} hour${hours === 1 ? '' : 's'}`;
     }
 
     function renderBirthdayMessage() {
@@ -823,14 +812,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         flashBirthdayGameRed();
         birthdayGameState.crossed.push(boxId);
-        const waitMinutes = getBirthdayGameWaitMinutes(birthdayGameState.round);
-        birthdayGameState.lockedUntil = Date.now() + waitMinutes * 60 * 1000;
+        birthdayGameState.lockedUntil = Date.now() + birthdayGameWrongWaitMs;
         saveBirthdayGameState();
         box.classList.add('crossed');
         box.textContent = '❌';
         birthdayGameChance.textContent = 'CHANCES LEFT: 0';
         birthdayGameNote.textContent = 'Ayyo, mwahhh Ammulu, all the best for next round, try better!';
-        birthdayGameWaitText.textContent = `Next round in ${formatBirthdayGameWait(waitMinutes)}.`;
+        birthdayGameWaitText.textContent = 'Next round in 3 seconds.';
 
         setTimeout(() => {
             setBirthdayGameView('lock');
@@ -861,7 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
         birthdayGameTimer.textContent = hours > 0
             ? `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
             : `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        birthdayGameWaitText.textContent = `Next round in ${formatBirthdayGameWait(getBirthdayGameWaitMinutes(birthdayGameState.round))}. 💛`;
+        birthdayGameWaitText.textContent = 'Next round in 3 seconds. 💛';
     }
 
     function showBirthdayGameWin() {
