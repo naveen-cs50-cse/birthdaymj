@@ -17,9 +17,75 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
     
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=final-clean-1">
+    <link rel="stylesheet" href="css/style.css?v=hard-lock-2027">
 </head>
 <body>
+
+    <!-- Date lock: cleared state and hidden app until November 13, 2027 -->
+    <div id="access-lock" class="access-lock" role="dialog" aria-modal="true" aria-label="Website locked">
+        <div class="access-lock-card">
+            <div class="access-lock-mark">🔒</div>
+            <p class="access-lock-kicker">PRIVATE WEBSITE LOCKED</p>
+            <h1>See you on November 13, 2027</h1>
+            <div id="access-lock-timer" class="access-lock-timer" aria-live="polite">Loading countdown...</div>
+            <p class="access-lock-copy">No old sessions or saved progress can be used.</p>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const unlockDate = new Date(2027, 10, 13, 0, 0, 0);
+            const lock = document.getElementById('access-lock');
+            const timer = document.getElementById('access-lock-timer');
+
+            try { localStorage.clear(); } catch (error) {}
+            try { sessionStorage.clear(); } catch (error) {}
+
+            if ('caches' in window) {
+                caches.keys().then(names => Promise.all(names.map(name => caches.delete(name)))).catch(() => {});
+            }
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations()
+                    .then(registrations => Promise.all(registrations.map(registration => registration.unregister())))
+                    .catch(() => {});
+            }
+
+            if ('indexedDB' in window && typeof indexedDB.databases === 'function') {
+                indexedDB.databases().then(databases => {
+                    databases.forEach(database => {
+                        if (database.name) indexedDB.deleteDatabase(database.name);
+                    });
+                }).catch(() => {});
+            }
+
+            function updateLock() {
+                const remaining = unlockDate.getTime() - Date.now();
+                if (remaining <= 0) {
+                    if (lock) lock.remove();
+                    document.documentElement.classList.remove('date-lock-active');
+                    return;
+                }
+
+                document.documentElement.classList.add('date-lock-active');
+                const totalSeconds = Math.floor(remaining / 1000);
+                const days = Math.floor(totalSeconds / 86400);
+                const hours = Math.floor((totalSeconds % 86400) / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                if (timer) {
+                    timer.textContent =
+                        String(days).padStart(2, '0') + 'd ' +
+                        String(hours).padStart(2, '0') + 'h ' +
+                        String(minutes).padStart(2, '0') + 'm ' +
+                        String(seconds).padStart(2, '0') + 's';
+                }
+            }
+
+            updateLock();
+            window.accessLockTimer = setInterval(updateLock, 1000);
+        }());
+    </script>
 
     <!-- Floating Painterly Sunflower Petals Canvas -->
     <canvas id="sunflower-canvas"></canvas>
@@ -368,10 +434,10 @@
     <audio id="bg-audio" src="assets/music/Phillip%20Phillips%20-%20Gone%2C%20Gone%2C%20Gone.mp3" preload="auto" loop playsinline></audio>
 
     <!-- Application Scripts -->
-    <script src="assets/data.js?v=final-clean-1"></script>
-    <script src="js/audio.js?v=final-clean-1"></script>
-    <script src="js/petals.js?v=final-clean-1"></script>
-    <script src="js/app.js?v=final-clean-1"></script>
+    <script src="assets/data.js?v=hard-lock-2027"></script>
+    <script src="js/audio.js?v=hard-lock-2027"></script>
+    <script src="js/petals.js?v=hard-lock-2027"></script>
+    <script src="js/app.js?v=hard-lock-2027"></script>
 
 </body>
 </html>

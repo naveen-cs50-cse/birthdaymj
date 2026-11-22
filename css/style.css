@@ -21,6 +21,62 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+.access-lock {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background:
+        radial-gradient(circle at 50% 20%, rgba(255, 183, 77, 0.16), transparent 34%),
+        #17120f;
+    color: #fff7e8;
+}
+
+.access-lock-card {
+    width: min(520px, 100%);
+    text-align: center;
+}
+
+.access-lock-mark {
+    margin-bottom: 18px;
+    font-size: 3.5rem;
+}
+
+.access-lock-kicker {
+    margin-bottom: 10px;
+    color: #f7b84b;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+}
+
+.access-lock h1 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 7vw, 3.2rem);
+    line-height: 1.12;
+}
+
+.access-lock-timer {
+    margin: 24px 0 16px;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(1.35rem, 6vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #ffd77a;
+}
+
+.access-lock-copy {
+    color: rgba(255, 247, 232, 0.72);
+    font-size: 0.86rem;
+}
+
+html.date-lock-active,
+html.date-lock-active body {
+    overflow: hidden;
+}
+
 html {
     font-size: 16px;
     scroll-behavior: smooth;
